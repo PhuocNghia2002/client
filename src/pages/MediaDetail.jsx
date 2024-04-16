@@ -22,13 +22,7 @@ import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
 import { setAuthModalOpen } from "../redux/features/authModalSlice";
 import { addFavorite, removeFavorite } from "../redux/features/userSlice";
 
-// import CastSlide from "../components/common/CastSlide";
-// import MediaVideosSlide from "../components/common/MediaVideosSlide";
-// import BackdropSlide from "../components/common/BackdropSlide";
-// import PosterSlide from "../components/common/PosterSlide";
-// import RecommendSlide from "../components/common/RecommendSlide";
-import MediaSlide from "../components/common/MediaSlide";
-// import MediaReview from "../components/common/MediaReview";
+import CastSlide from "../components/common/CastSlide";
 
 const MediaDetail = () => {
 	const { mediaType, mediaId } = useParams();
@@ -45,7 +39,6 @@ const MediaDetail = () => {
 	const videoRef = useRef(null);
 
 	useEffect(() => {
-		window.scrollTo(0, 0);
 		const getMedia = async () => {
 			dispatch(setGlobalLoading(true));
 			const { response, err } = await mediaApi.getDetail({ mediaType, mediaId });
@@ -63,55 +56,55 @@ const MediaDetail = () => {
 		getMedia();
 	}, [mediaType, mediaId, dispatch]);
 
-	// const onFavoriteClick = async () => {
-	// 	if (!user) return dispatch(setAuthModalOpen(true));
+	const onFavoriteClick = async () => {
+		if (!user) return dispatch(setAuthModalOpen(true));
 
-	// 	if (onRequest) return;
+		if (onRequest) return;
 
-	// 	if (isFavorite) {
-	// 		onRemoveFavorite();
-	// 		return;
-	// 	}
+		if (isFavorite) {
+			onRemoveFavorite();
+			return;
+		}
 
-	// 	setOnRequest(true);
+		setOnRequest(true);
 
-	// 	const body = {
-	// 		mediaId: media.id,
-	// 		mediaTitle: media.title || media.name,
-	// 		mediaType: mediaType,
-	// 		mediaPoster: media.poster_path,
-	// 		mediaRate: media.vote_average,
-	// 	};
+		const body = {
+			mediaId: media.id,
+			mediaTitle: media.title || media.name,
+			mediaType: mediaType,
+			mediaPoster: media.poster_path,
+			mediaRate: media.vote_average,
+		};
 
-	// 	const { response, err } = await favoriteApi.add(body);
+		const { response, err } = await favoriteApi.add(body);
 
-	// 	setOnRequest(false);
+		setOnRequest(false);
 
-	// 	if (err) toast.error(err.message);
-	// 	if (response) {
-	// 		dispatch(addFavorite(response));
-	// 		setIsFavorite(true);
-	// 		toast.success("Add favorite success");
-	// 	}
-	// };
+		if (err) toast.error(err.message);
+		if (response) {
+			dispatch(addFavorite(response));
+			setIsFavorite(true);
+			toast.success("Add favorite success");
+		}
+	};
 
-	// const onRemoveFavorite = async () => {
-	// 	if (onRequest) return;
-	// 	setOnRequest(true);
+	const onRemoveFavorite = async () => {
+		if (onRequest) return;
+		setOnRequest(true);
 
-	// 	const favorite = listFavorites.find((e) => e.mediaId.toString() === media.id.toString());
+		const favorite = listFavorites.find((e) => e.mediaId.toString() === media.id.toString());
 
-	// 	const { response, err } = await favoriteApi.remove({ favoriteId: favorite.id });
+		const { response, err } = await favoriteApi.remove({ favoriteId: favorite.id });
 
-	// 	setOnRequest(false);
+		setOnRequest(false);
 
-	// 	if (err) toast.error(err.message);
-	// 	if (response) {
-	// 		dispatch(removeFavorite(favorite));
-	// 		setIsFavorite(false);
-	// 		toast.success("Remove favorite success");
-	// 	}
-	// };
+		if (err) toast.error(err.message);
+		if (response) {
+			dispatch(removeFavorite(favorite));
+			setIsFavorite(false);
+			toast.success("Remove favorite success");
+		}
+	};
 
 	return media ? (
 		<>
@@ -146,7 +139,7 @@ const MediaDetail = () => {
 									paddingTop: "140%",
 									...uiConfigs.style.backgroundImage(tmdbConfigs.posterPath(media.poster_path || media.backdrop_path)),
 								}}
-							/>
+							></Box>
 						</Box>
 						{/* poster */}
 
@@ -184,9 +177,9 @@ const MediaDetail = () => {
 									{/* rate */}
 									<Divider orientation="vertical" />
 									{/* genres */}
-									{genres.map((genre, index) => (
+									{genres.map((genres, index) => (
 										<Chip
-											label={genre.name}
+											label={genres.name}
 											variant="filled"
 											color="primary"
 											key={index}
@@ -197,16 +190,18 @@ const MediaDetail = () => {
 								{/* rate and genres */}
 
 								{/* overview */}
-								<Typography
-									variant="body1"
-									sx={{ ...uiConfigs.style.typoLines(5) }}
-								>
-									{media.overview}
-								</Typography>
+								<Box>
+									<Typography
+										variant="body1"
+										sx={{ ...uiConfigs.style.typoLines(5) }}
+									>
+										{media.overview}
+									</Typography>
+								</Box>
 								{/* overview */}
 
 								{/* buttons */}
-								{/* <Stack
+								<Stack
 									direction="row"
 									spacing={1}
 								>
@@ -214,7 +209,7 @@ const MediaDetail = () => {
 										variant="text"
 										sx={{
 											width: "max-content",
-											"& .MuiButon-starIcon": { marginRight: "0" },
+											"& .MuiButton-startIcon": { marginRight: "0" },
 										}}
 										size="large"
 										startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderOutlinedIcon />}
@@ -231,13 +226,13 @@ const MediaDetail = () => {
 									>
 										watch now
 									</Button>
-								</Stack> */}
+								</Stack>
 								{/* buttons */}
 
 								{/* cast */}
-								{/* <Container header="Cast">
+								<Container header="Cast">
 									<CastSlide casts={media.credits.cast} />
-								</Container> */}
+								</Container>
 								{/* cast */}
 							</Stack>
 						</Box>
@@ -245,58 +240,6 @@ const MediaDetail = () => {
 					</Box>
 				</Box>
 				{/* media content */}
-
-				{/* media videos */}
-				{/* <div
-					ref={videoRef}
-					style={{ paddingTop: "2rem" }}
-				>
-					<Container header="Videos">
-						<MediaVideosSlide videos={[...media.videos.results].splice(0, 5)} />
-					</Container>
-				</div> */}
-				{/* media videos */}
-
-				{/* media backdrop */}
-				{/* {media.images.backdrops.length > 0 && (
-					<Container header="backdrops">
-						<BackdropSlide backdrops={media.images.backdrops} />
-					</Container>
-				)} */}
-				{/* media backdrop */}
-
-				{/* media posters */}
-				{/* {media.images.posters.length > 0 && (
-					<Container header="posters">
-						<PosterSlide posters={media.images.posters} />
-					</Container>
-				)} */}
-				{/* media posters */}
-
-				{/* media reviews */}
-				{/* <MediaReview
-					reviews={media.reviews}
-					media={media}
-					mediaType={mediaType}
-				/> */}
-				{/* media reviews */}
-
-				{/* media recommendation */}
-				{/* <Container header="you may also like">
-					{media.recommend.length > 0 && (
-						<RecommendSlide
-							medias={media.recommend}
-							mediaType={mediaType}
-						/>
-					)}
-					{media.recommend.length === 0 && (
-						<MediaSlide
-							mediaType={mediaType}
-							mediaCategory={tmdbConfigs.mediaCategory.top_rated}
-						/>
-					)}
-				</Container> */}
-				{/* media recommendation */}
 			</Box>
 		</>
 	) : null;

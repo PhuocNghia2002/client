@@ -121,7 +121,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
 			open={open}
 			onClose={() => toggleSidebar(false)}
 			sx={{
-				"& .MuiDrawer-Paper": {
+				"& .MuiDrawer-paper": {
 					boxSizing: "border-box",
 					widh: sidebarWidth,
 					borderRight: "0px",
